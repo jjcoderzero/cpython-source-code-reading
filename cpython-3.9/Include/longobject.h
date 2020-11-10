@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 
-/* Long (arbitrary precision) integer object interface */
+/* Long(任意精度)整数对象接口 */
 
 typedef struct _longobject PyLongObject; /* Revealed in longintrepr.h */
 

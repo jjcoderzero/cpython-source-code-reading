@@ -190,10 +190,10 @@ typedef struct {
  * backwards-compatibility */
 typedef Py_ssize_t printfunc;
 
-struct _typeobject {
+struct _typeobject { // 一个PyTypeObject对象就是Python中对面向对象理论中“类”这个概念的实现
     PyObject_VAR_HEAD
-    const char *tp_name; /* For printing, in format "<module>.<name>" */
-    Py_ssize_t tp_basicsize, tp_itemsize; /* For allocation */
+    const char *tp_name; /* 类型名，tp_name，主要是Python内部以及调试的时候使用；打印格式为"<module>.<name>" */
+    Py_ssize_t tp_basicsize, tp_itemsize; /* 创建该类型对象时分配内存空间大小的信息，即tp_basicsize和tp_itemsize； */
 
     /* Methods to implement standard operations */
 

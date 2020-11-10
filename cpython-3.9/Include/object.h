@@ -52,7 +52,7 @@ A standard interface exists for objects that contain an array of items
 whose size is determined when the object is allocated.
 */
 
-/* Py_DEBUG implies Py_REF_DEBUG. */
+/* Py_DEBUG意味着Py_REF_DEBUG。*/
 #if defined(Py_DEBUG) && !defined(Py_REF_DEBUG)
 #define Py_REF_DEBUG
 #endif
@@ -61,12 +61,11 @@ whose size is determined when the object is allocated.
 #error Py_LIMITED_API is incompatible with Py_DEBUG, Py_TRACE_REFS, and Py_REF_DEBUG
 #endif
 
-/* PyTypeObject structure is defined in cpython/object.h.
-   In Py_LIMITED_API, PyTypeObject is an opaque structure. */
+/* PyTypeObject结构在cpython/object.h中定义。在Py_LIMITED_API中，PyTypeObject是一个不透明结构。*/
 typedef struct _typeobject PyTypeObject;
 
 #ifdef Py_TRACE_REFS
-/* Define pointers to support a doubly-linked list of all live heap objects. */
+/* 定义指针以支持所有活动堆对象的双链列表 */
 #define _PyObject_HEAD_EXTRA            \
     struct _object *_ob_next;           \
     struct _object *_ob_prev;
@@ -78,7 +77,7 @@ typedef struct _typeobject PyTypeObject;
 #define _PyObject_EXTRA_INIT
 #endif
 
-/* PyObject_HEAD defines the initial segment of every PyObject. */
+/* PyObject_HEAD定义每个PyObject的初始段。*/
 #define PyObject_HEAD                   PyObject ob_base;
 
 #define PyObject_HEAD_INIT(type)        \
@@ -97,16 +96,12 @@ typedef struct _typeobject PyTypeObject;
 #define PyObject_VAR_HEAD      PyVarObject ob_base;
 #define Py_INVALID_SIZE (Py_ssize_t)-1
 
-/* Nothing is actually declared to be a PyObject, but every pointer to
- * a Python object can be cast to a PyObject*.  This is inheritance built
- * by hand.  Similarly every pointer to a variable-size Python object can,
- * in addition, be cast to PyVarObject*.
- */
-typedef struct _object {
+/* 实际上没有任何东西被声明为PyObject，但是每个指向Python对象的指针都可以转换为PyObject*。这是手工构建的继承。同样，每个指向可变大小Python对象的指针也可以转换为PyVarObject*。*/
+typedef struct _object { // 在Python中，对象机制的核心，一个是引用计数，一个就是类型信息。
     _PyObject_HEAD_EXTRA
-    Py_ssize_t ob_refcnt;
-    PyTypeObject *ob_type;
-} PyObject;
+    Py_ssize_t ob_refcnt; // 整型变量ob_refcnt与Python的内存管理机制有关，它实现了基于引用计数的垃圾收集机制。
+    PyTypeObject *ob_type; // 这个结构体对应着Python内部的一种特殊对象，它是用来指定一个对象类型的类型对象。
+} PyObject; // 这个结构体是Python对象机制的核心基石
 
 /* Cast argument to PyObject* type. */
 #define _PyObject_CAST(op) ((PyObject*)(op))
@@ -114,10 +109,10 @@ typedef struct _object {
 
 typedef struct {
     PyObject ob_base;
-    Py_ssize_t ob_size; /* Number of items in variable part */
+    Py_ssize_t ob_size; /* 可变部分的元素数量 ob_size指明的是所容纳元素的个数，而不是字节的数量。*/
 } PyVarObject;
 
-/* Cast argument to PyVarObject* type. */
+/* 将参数转换为PyVarObject*类型。*/
 #define _PyVarObject_CAST(op) ((PyVarObject*)(op))
 
 #define Py_REFCNT(ob)           (_PyObject_CAST(ob)->ob_refcnt)
